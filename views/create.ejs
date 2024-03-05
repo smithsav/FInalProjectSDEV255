@@ -6,13 +6,21 @@
             <form action="/courses" method="POST">
 
                 <label for="name">Course Name:</label>
-                <input type="text" id="title" name="title" required>
-                <label for="subject area">Subject Area:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="subject">Subject Area</label>
+                <input type="text" id="subjectArea" name="subjectArea" required>
+
+                <label for="creditHours">Credit Hours</label>
+                <input type="number" id="creditHours" name="creditHours" required>
+
+                <label for="snippet">Short description:</label>
                 <input type="text" id="snippet" name="snippet" required>
-                <label for="numCredits">Credit Hours:</label>
-                <input type="text" id="snippet" name="snippet" required>
-                <label for="description">Course Description:</label>
-                <textarea id="body" name="body" required></textarea>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+
+
                 <button>Submit</button>
             </form>
         </div>
@@ -20,12 +28,3 @@
         <%- include('./partials/footer.ejs')%>
 
 
-<!-- <form action="/blogs" method="POST">
-    <label for="title">Blog title:</label>
-    <input type="text" id="title" name="title" required>
-    <label for="snippet">Blog snippet:</label>
-    <input type="text" id="snippet" name="snippet" required>
-    <label for="body">Blog body:</label>
-    <textarea id="body" name="body" required></textarea>
-    <button>Submit</button>
-</form> -->

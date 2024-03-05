@@ -1,0 +1,22 @@
+<%- include('partials/header'); -%>
+
+
+<div class="blogs content">
+    <h2>Course Catalog</h2>
+
+    <a href="/courses/create" class="btn">Add Course</a>
+
+    <% if (courses.length > 0) { %>
+        <% courses.forEach(course => { %>
+            <a class="single" href="/courses/<%= course._id %>">
+                <h3 class="title"><%= course.name %></h3>
+                <p class="snippet"><%= course.snippet %></p>
+                <p class="snippet">Credit Hours: <%= course.creditHours %></p>
+                <p class="snippet">Area of Study: <%= course.subjectArea %></p>
+            </a>
+        <% }) %>
+    <% } else { %>
+        <p>There are no classes to display...</p>
+    <% } %>
+
+    <%- include('./partials/footer.ejs')%>

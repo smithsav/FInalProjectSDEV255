@@ -11,6 +11,11 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+    res.locals.path = req.path;
+    next();
+});
 
 // view engine
 app.set('view engine', 'ejs');
@@ -24,7 +29,8 @@ mongoose.connect(dbURI)
 // routes
 app.get('*', checkUser);
 app.get('/', (req, res) => res.render('home'));
-app.get('/courses', requireAuth, (req, res) => res.render('courses'));
+// app.get('/courses', requireAuth, (req, res) => res.render('courses'));
+app.get('/create', (req,res) => res.render('create'));
 app.use(authRoutes);
 
 // course routes

@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const courseSchema = new Schema({
-    title: {
+    name: {
+        type: String,
+        required: true
+    },
+    description: {
         type: String,
         required: true
     },
@@ -10,8 +14,12 @@ const courseSchema = new Schema({
         type: String,
         required: true
     },
-    body: {
+    subjectArea: {
         type: String,
+        required: true
+    },
+    creditHours: {
+        type: Number,
         required: true
     }
 }, {timestamps: true});
