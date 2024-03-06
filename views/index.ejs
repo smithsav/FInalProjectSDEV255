@@ -1,0 +1,85 @@
+<%- include('partials/header'); -%>
+
+<div class="courses content">
+    <h2>Course Catalog</h2>
+
+
+    <% if (user && user.role === 'Staff') { %>
+        <button type="button" class="btn delete-button">Delete</button>
+        <button onclick="window.location.href='/courses/create'" class="btn">Add Course</button>
+    <% } %>
+
+    <% if (user && user.role === 'Student') { %>
+        <button class="btn">Add to Cart</button>
+    <% } %>
+
+    <% if (courses.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Course Name</th>
+                    <th>Snippet</th>
+                    <th>Credit Hours</th>
+                    <th>Area of Study</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% courses.forEach(course => { %>
+                    <tr>
+                        <td><input type="checkbox" name="courseCheckbox" data-val="<%= course._id %>"></td>
+                        <td><a href="/courses/<%= course._id %>"><%= course.name %></a></td>
+                        <td><%= course.snippet %></td>
+                        <td><%= course.creditHours %></td>
+                        <td><%= course.subjectArea %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>There are no classes to display...</p>
+    <% } %>
+</div>
+
+<%- include('partials/footer'); -%>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const deleteButton = document.querySelector('.delete-button');
+
+        if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('input[name="courseCheckbox"]:checked');
+                const courseIds = Array.from(checkboxes).map(checkbox => checkbox.dataset.val);
+
+                if (courseIds.length === 0) {
+                    alert('Please select at least one course to delete.');
+                    return;
+                }
+
+                const confirmation = confirm('Are you sure you want to delete the selected courses?');
+
+                if (!confirmation) {
+                    return;
+                }
+
+                const endpoint = '/courses/' + courseIds.join(',');
+
+                fetch(endpoint, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    
+                    console.log(data);
+                    
+                    window.location.href = data.redirect;
+                })
+                .catch(err => console.error(err));
+            });
+        }
+    });
+</script>
