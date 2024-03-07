@@ -1,0 +1,14 @@
+<%- include('partials/header'); -%>
+
+<body>
+
+    <div class="cart content">
+        <h2>Your Cart</h2>
+        <ul>
+            <% cart.forEach(item => { %>
+                <li><%= item.name %></li>
+            <% }); %>
+        </ul>
+    </div>
+
+<%- include("./partials/footer.ejs") %>
