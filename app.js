@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 const cookieParser = require('cookie-parser');
 const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 
@@ -27,14 +28,13 @@ mongoose.connect(dbURI)
     .catch((err) => console.log(err));
 
 // routes
-app.get('*', checkUser);
+app.use(checkUser);
 app.get('/', (req, res) => res.render('home'));
-// app.get('/courses', requireAuth, (req, res) => res.render('courses'));
-app.get('/create', (req,res) => res.render('create'));
-app.use(authRoutes);
+app.get('/create', requireAuth, (req,res) => res.render('create'));
 
-// course routes
-app.use('/courses',courseRoutes);
+app.use(authRoutes);
+app.use('/courses', requireAuth,courseRoutes);
+app.use('/cart', requireAuth, cartRoutes);
 
 // 404 page
 app.use((req, res) => {

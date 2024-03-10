@@ -10,16 +10,18 @@
     <% } %>
 
     <% if (user && user.role === 'Student') { %>
-        <button class="btn">Add to Cart</button>
+        <button id="addToCartButton" class="btn">Add Selected Courses to Cart</button>
+        <button onclick="window.location.href='/cart/view'" class="btn">View Cart</button>
     <% } %>
+    
 
     <% if (courses.length > 0) { %>
         <table>
             <thead>
                 <tr>
                     <th>Select</th>
-                    <th>Course Name</th>
-                    <th>Snippet</th>
+                    <th>Course Code</th>
+                    <th>Name</th>
                     <th>Credit Hours</th>
                     <th>Area of Study</th>
                 </tr>
@@ -79,6 +81,39 @@
                     window.location.href = data.redirect;
                 })
                 .catch(err => console.error(err));
+            });
+        }
+        const addToCartButton = document.getElementById('addToCartButton');
+        if (addToCartButton) {
+            addToCartButton.addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('input[name="courseCheckbox"]:checked');
+                const courseIds = Array.from(checkboxes).map(checkbox => checkbox.dataset.val);
+
+                if (courseIds.length === 0) {
+                    alert('Please select at least one course to add to your cart.');
+                    return;
+                }
+                fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ courseIds: courseIds }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Courses added to cart successfully.');
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error adding courses to cart:', error);
+                    alert('There was a problem adding courses to your cart.');
+                });
             });
         }
     });
